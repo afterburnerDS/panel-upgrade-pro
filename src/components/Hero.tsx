@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const VALUE_CHIPS = [
   "Safety & code compliance",
@@ -22,6 +22,7 @@ interface HeroProps {
 
 const Hero = ({ age, setAge, onStartQuiz, onContinue, step, totalSteps }: HeroProps) => {
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [homeowner, setHomeowner] = useState<"yes" | "no" | "">("");
 
   useEffect(() => {
     // Ensure focus ring is visible for accessibility when jumping to Q1
@@ -36,64 +37,53 @@ const Hero = ({ age, setAge, onStartQuiz, onContinue, step, totalSteps }: HeroPr
     <header className="relative overflow-hidden">
       <div className="bg-hero-gradient">
         <div className="container px-4 py-12 sm:py-16 md:py-20 text-primary-foreground">
-          <div className="max-w-3xl mx-auto text-center">
-            <p className="mb-3 inline-flex items-center gap-2 rounded-full bg-accent/20 text-accent-foreground px-3 py-1 text-xs tracking-wide">
-              <span className="inline-block size-2 rounded-full bg-accent" /> Premium Panel Upgrades
-            </p>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
-              Transform Your Home’s Electrical System — Premium Panel Upgrades ($8K–$15K Avg)
-            </h1>
-            <p className="mt-4 text-base sm:text-lg max-w-prose opacity-90 mx-auto">
-              Safer, smarter, and ready for EVs & modern living. Take our 60-second Panel Check to unlock $200 OFF your upgrade.
-            </p>
-            <p className="mt-2 text-sm opacity-90">★★★★★ 4.9/5 from high-end homeowners</p>
-
-            <div className="mt-8">
-              <div className="mx-auto max-w-2xl rounded-xl border border-white/10 bg-card text-foreground shadow-lg overflow-hidden">
-                <div className="bg-success/10 text-success px-4 py-2 text-sm border-b border-success/20">
-                  Licensed • Insured • Permit & inspection included
-                </div>
-                <div className="p-4 sm:p-6">
-                  <fieldset>
-                    <legend className="block text-sm font-medium mb-3">Q1. How old is your current electrical panel?</legend>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                      {( ["<10", "10-20", "20-30", "30+ / not sure"] as AgeOption[] ).map((opt) => (
-                        <button
-                          key={opt}
-                          type="button"
-                          onClick={() => setAge(opt)}
-                          className={`rounded-lg px-3 py-2 text-sm border transition ${
-                            age === opt ? "bg-accent text-accent-foreground border-accent" : "bg-background border-input hover:bg-accent/10"
-                          }`}
-                          aria-pressed={age === opt}
-                        >
-                          {opt.startsWith("<") ? `🟢 ${opt} years` : opt.startsWith("10") ? `🟡 ${opt} years` : opt.startsWith("20") ? `🟠 ${opt} years` : `🔴 ${opt}`}
-                        </button>
-                      ))}
-                    </div>
-                    <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center">
-                      <Button data-cta="start-quiz" variant="hero" size="lg" onClick={onStartQuiz}>
-                        Start 60-Second Panel Check
-                      </Button>
-                      <Button variant="outline" size="lg" onClick={onContinue}>
-                        Continue to Next Question
-                      </Button>
-                    </div>
-                  </fieldset>
-                </div>
+          <div className="max-w-3xl mx-auto">
+            <h1 className="sr-only">Transform Your Home’s Electrical System — Premium Panel Upgrades ($8K–$15K Avg)</h1>
+            <div
+              ref={sectionRef}
+              className="mx-auto max-w-2xl rounded-2xl bg-card text-foreground shadow-lg border border-white/10 overflow-hidden focus:outline-none"
+            >
+              <div className="bg-success/15 text-success px-4 py-2 text-sm flex items-center justify-between">
+                <span>High-end homeowners boost safety & capacity with upgrades</span>
+                <span aria-hidden>→</span>
               </div>
-            </div>
+              <div className="p-5 sm:p-7">
+                <fieldset>
+                  <legend className="text-2xl sm:text-3xl font-semibold text-center mb-2">🏠 Are you a homeowner?</legend>
+                  <p className="text-center text-muted-foreground mb-4">Panel upgrades are typically installed by property owners</p>
 
-            <div className="mt-8 flex flex-wrap justify-center gap-2">
-              {VALUE_CHIPS.map((chip) => (
-                <span
-                  key={chip}
-                  className="text-xs sm:text-sm rounded-full bg-secondary/20 text-primary-foreground border border-white/10 px-3 py-1"
-                  aria-label={chip}
-                >
-                  {chip}
-                </span>
-              ))}
+                  <div className="space-y-3">
+                    <button
+                      type="button"
+                      onClick={() => setHomeowner('yes')}
+                      aria-pressed={homeowner==='yes'}
+                      className={`w-full flex items-center gap-3 rounded-xl border px-4 py-3 text-left transition ${homeowner==='yes' ? 'border-accent bg-accent/10' : 'border-input bg-background hover:bg-accent/10'}`}
+                    >
+                      <span className="size-5 shrink-0 rounded-full border border-input grid place-items-center">{homeowner==='yes' ? '✅' : ''}</span>
+                      <span className="font-medium">Yes, I own my home</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setHomeowner('no')}
+                      aria-pressed={homeowner==='no'}
+                      className={`w-full flex items-center gap-3 rounded-xl border px-4 py-3 text-left transition ${homeowner==='no' ? 'border-accent bg-accent/10' : 'border-input bg-background hover:bg-accent/10'}`}
+                    >
+                      <span className="size-5 shrink-0 rounded-full border border-input grid place-items-center">{homeowner==='no' ? '❌' : ''}</span>
+                      <span className="font-medium">No, I rent/lease</span>
+                    </button>
+                  </div>
+
+                  <div className="mt-5">
+                    <Button data-cta="continue-from-hero" variant="hero" size="lg" className="w-full" onClick={onContinue}>
+                      Continue to Next Question →
+                    </Button>
+                  </div>
+
+                  <p className="mt-3 text-center text-xs text-muted-foreground">
+                    ✅ Personalized recommendations • ✅ Instant results • ✅ 100% Free
+                  </p>
+                </fieldset>
+              </div>
             </div>
           </div>
         </div>

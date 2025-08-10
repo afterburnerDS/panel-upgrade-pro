@@ -3,6 +3,7 @@ import SEOHead from "@/components/SEOHead";
 import Hero from "@/components/Hero";
 import Benefits from "@/components/Benefits";
 import SocialProof from "@/components/SocialProof";
+import PostSocialCTA from "@/components/PostSocialCTA";
 import Quiz from "@/components/Quiz";
 import LeadGate from "@/components/LeadGate";
 import ResultsReport from "@/components/ResultsReport";
@@ -84,6 +85,7 @@ const Index = () => {
 
       <Benefits />
       <SocialProof />
+      <PostSocialCTA onCTAClick={onContinueFromHero} />
 
       <Quiz
         answers={answers}
