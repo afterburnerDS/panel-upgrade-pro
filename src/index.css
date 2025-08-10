@@ -17,8 +17,11 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    /* Brand palette - Premium Panel Upgrades */
+    --primary: 202 74% 15%;               /* #0B2E45 deep blue */
     --primary-foreground: 210 40% 98%;
+    --primary-variant: 203 76% 10%;       /* darker for hover/gradient end */
+    --primary-glow: 202 74% 25%;          /* lighter for focus ring/shadow */
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -26,33 +29,34 @@ All colors MUST be HSL.
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96.1%;
+    --accent: 38 92% 50%;                /* #F59E0B amber */
     --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
+    --success: 160 84% 40%;              /* #10B981 */
+
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 202 74% 25%;
 
-    --radius: 0.5rem;
+    --radius: 0.5rem; /* 8px */
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Gradients & shadows */
+    --hero-start: 202 74% 15%;
+    --hero-end: 203 76% 10%;
+    --shadow-elevated: 0 10px 30px -10px hsl(var(--primary-glow) / 0.35);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .dark {
