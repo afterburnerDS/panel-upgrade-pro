@@ -3,12 +3,12 @@ import SEOHead from "@/components/SEOHead";
 import Hero from "@/components/Hero";
 import Benefits from "@/components/Benefits";
 import SocialProof from "@/components/SocialProof";
-import PostSocialCTA from "@/components/PostSocialCTA";
+
 import Quiz from "@/components/Quiz";
 import LeadGate from "@/components/LeadGate";
 import ResultsReport from "@/components/ResultsReport";
 import CalendarSection from "@/components/CalendarSection";
-import FAQ from "@/components/FAQ";
+
 import SiteFooter from "@/components/SiteFooter";
 import MobileStickyCTA from "@/components/MobileStickyCTA";
 import type { QuizAnswers, LeadInfo } from "@/types/quiz";
@@ -85,7 +85,7 @@ const Index = () => {
 
       <Benefits />
       <SocialProof />
-      <PostSocialCTA onCTAClick={onContinueFromHero} />
+      
 
       <Quiz
         answers={answers}
@@ -112,7 +112,7 @@ const Index = () => {
         </div>
       )}
 
-      <FAQ />
+      
       <SiteFooter />
 
       <MobileStickyCTA onClick={onContinueFromHero} />
