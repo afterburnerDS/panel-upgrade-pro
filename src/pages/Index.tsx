@@ -8,6 +8,8 @@ import ThreeSteps from "@/components/ThreeSteps";
 import BottomCTA from "@/components/BottomCTA";
 import SiteFooter from "@/components/SiteFooter";
 import MobileStickyCTA from "@/components/MobileStickyCTA";
+import SiteHeader from "@/components/SiteHeader";
+import AssessmentCompare from "@/components/AssessmentCompare";
 import type { QuizAnswers } from "@/types/quiz";
 
 const Index = () => {
@@ -43,6 +45,7 @@ const Index = () => {
   return (
     <main>
       <SEOHead title={seoTitle} description={seoDesc} />
+      <SiteHeader />
       <Hero
         age={answers.age as any}
         setAge={(age) => setAnswers({ ...answers, age })}
@@ -51,7 +54,8 @@ const Index = () => {
         step={step}
         totalSteps={totalSteps}
       />
-
+      <AssessmentCompare />
+      
       <Benefits />
       <SocialProof />
       <ThreeSteps onCTAClick={() => navigate("/quiz")} />
