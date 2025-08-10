@@ -55,16 +55,6 @@ const Hero = ({ age, setAge, onStartQuiz, onContinue, step, totalSteps }: HeroPr
               </div>
               <span className="text-sm">4.9/5 from 1,500+ homeowners</span>
             </div>
-            <ul className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-              {VALUE_CHIPS.map((chip) => (
-                <li
-                  key={chip}
-                  className="rounded-full border border-white/20 bg-background/40 px-3 py-1 text-xs sm:text-sm"
-                >
-                  {chip}
-                </li>
-              ))}
-            </ul>
             <div
               ref={sectionRef}
               className="mx-auto max-w-2xl rounded-2xl bg-card text-foreground shadow-lg border border-white/10 overflow-hidden focus:outline-none"
@@ -111,6 +101,16 @@ const Hero = ({ age, setAge, onStartQuiz, onContinue, step, totalSteps }: HeroPr
                 </fieldset>
               </div>
             </div>
+            <ul className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+              {VALUE_CHIPS.map((chip) => (
+                <li
+                  key={chip}
+                  className="rounded-full border border-white/20 bg-background/40 px-3 py-1 text-xs sm:text-sm"
+                >
+                  {chip}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
