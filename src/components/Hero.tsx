@@ -38,7 +38,22 @@ const Hero = ({ age, setAge, onStartQuiz, onContinue, step, totalSteps }: HeroPr
       <div className="bg-hero-gradient">
         <div className="container px-4 py-12 sm:py-16 md:py-20 text-primary-foreground">
           <div className="max-w-3xl mx-auto">
-            <h1 className="sr-only">Transform Your Home’s Electrical System — Premium Panel Upgrades ($8K–$15K Avg)</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-center">
+              Transform Your Home’s Electrical System — Premium Panel Upgrades ($8K–$15K Avg)
+            </h1>
+            <p className="mt-3 text-base sm:text-lg md:text-xl text-center opacity-90">
+              Safer, smarter, and ready for EVs & modern living. Take our 60-second Panel Check to unlock $200 OFF your upgrade.
+            </p>
+            <ul className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+              {VALUE_CHIPS.map((chip) => (
+                <li
+                  key={chip}
+                  className="rounded-full border border-white/20 bg-background/40 px-3 py-1 text-xs sm:text-sm"
+                >
+                  {chip}
+                </li>
+              ))}
+            </ul>
             <div
               ref={sectionRef}
               className="mx-auto max-w-2xl rounded-2xl bg-card text-foreground shadow-lg border border-white/10 overflow-hidden focus:outline-none"
