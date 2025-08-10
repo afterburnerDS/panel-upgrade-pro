@@ -38,12 +38,23 @@ const Hero = ({ age, setAge, onStartQuiz, onContinue, step, totalSteps }: HeroPr
       <div className="bg-hero-gradient">
         <div className="container px-4 py-12 sm:py-16 md:py-20 text-primary-foreground">
           <div className="max-w-3xl mx-auto">
+            <div className="flex justify-center mb-3">
+              <span className="inline-flex items-center gap-2 rounded-full bg-success/15 text-success px-3 py-1 text-xs sm:text-sm">
+                <span aria-hidden>✨</span> Free Panel Upgrade Check
+              </span>
+            </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-center">
-              Transform Your Home’s Electrical System — Premium Panel Upgrades ($8K–$15K Avg)
+              Could You Be Safer & EV‑Ready with a Premium Panel Upgrade? <span className="text-accent">($8K–$15K Avg)</span>
             </h1>
             <p className="mt-3 text-base sm:text-lg md:text-xl text-center opacity-90">
-              Safer, smarter, and ready for EVs & modern living. Take our 60-second Panel Check to unlock $200 OFF your upgrade.
+              Take our <strong>FREE 60‑second panel check</strong> and discover exactly what your home needs — personalized for your home and goals. Unlock $200 OFF.
             </p>
+            <div className="mt-4 flex items-center justify-center gap-3 text-muted-foreground">
+              <div className="flex gap-1 text-lg" aria-label="4.9 out of 5 stars">
+                <span>⭐️</span><span>⭐️</span><span>⭐️</span><span>⭐️</span><span>⭐️</span>
+              </div>
+              <span className="text-sm">4.9/5 from 1,500+ homeowners</span>
+            </div>
             <ul className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
               {VALUE_CHIPS.map((chip) => (
                 <li
