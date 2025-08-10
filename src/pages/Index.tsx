@@ -4,6 +4,7 @@ import SEOHead from "@/components/SEOHead";
 import Hero from "@/components/Hero";
 import Benefits from "@/components/Benefits";
 import SocialProof from "@/components/SocialProof";
+import ThreeSteps from "@/components/ThreeSteps";
 import BottomCTA from "@/components/BottomCTA";
 import SiteFooter from "@/components/SiteFooter";
 import MobileStickyCTA from "@/components/MobileStickyCTA";
@@ -53,6 +54,7 @@ const Index = () => {
 
       <Benefits />
       <SocialProof />
+      <ThreeSteps onCTAClick={() => navigate("/quiz")} />
       
 
 
