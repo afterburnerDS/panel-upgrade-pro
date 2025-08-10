@@ -18,10 +18,10 @@ All colors MUST be HSL.
     --popover-foreground: 222.2 84% 4.9%;
 
     /* Brand palette - Premium Panel Upgrades */
-    --primary: 202 74% 15%;               /* #0B2E45 deep blue */
+    --primary: 0 0% 10%;               /* near-black primary for Wattleads branding */
     --primary-foreground: 210 40% 98%;
-    --primary-variant: 203 76% 10%;       /* darker for hover/gradient end */
-    --primary-glow: 202 74% 25%;          /* lighter for focus ring/shadow */
+    --primary-variant: 0 0% 7%;         /* darker for hover/gradient end */
+    --primary-glow: 0 0% 20%;           /* lighter for focus ring/shadow */
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -53,8 +53,8 @@ All colors MUST be HSL.
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     /* Gradients & shadows */
-    --hero-start: 202 74% 15%;
-    --hero-end: 203 76% 10%;
+    --hero-start: 0 0% 12%;
+    --hero-end: 0 0% 7%;
     --shadow-elevated: 0 10px 30px -10px hsl(var(--primary-glow) / 0.35);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
