@@ -8,6 +8,8 @@ import NotFound from "./pages/NotFound";
 import ThankYou from "./pages/ThankYou";
 import QuizPage from "./pages/QuizPage";
 import LeadForm from "./pages/LeadForm";
+import Loading from "./pages/Loading";
+import Results from "./pages/Results";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -20,6 +22,8 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/quiz" element={<QuizPage />} />
           <Route path="/lead" element={<LeadForm />} />
+          <Route path="/loading" element={<Loading />} />
+          <Route path="/results" element={<Results />} />
           <Route path="/thank-you" element={<ThankYou />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

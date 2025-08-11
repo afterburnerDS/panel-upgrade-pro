@@ -25,6 +25,9 @@ const QuizPage = () => {
 
 
   const onQuizComplete = () => {
+    try {
+      localStorage.setItem("panelQuizAnswers", JSON.stringify(answers));
+    } catch {}
     navigate("/lead");
   };
 

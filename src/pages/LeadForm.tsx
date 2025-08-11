@@ -6,9 +6,11 @@ import type { LeadInfo } from "@/types/quiz";
 const LeadForm = () => {
   const navigate = useNavigate();
 
-  const handleSubmitted = (_lead: LeadInfo) => {
-    // Standalone form: route to thank-you after submit
-    navigate("/thank-you");
+  const handleSubmitted = (lead: LeadInfo) => {
+    try {
+      localStorage.setItem("panelLeadInfo", JSON.stringify(lead));
+    } catch {}
+    navigate("/loading");
   };
 
   return (
