@@ -23,5 +23,6 @@ export interface LeadInfo {
   name: string;
   email: string;
   phone: string;
+  zip?: string; // postcode moved to form
   consent: boolean;
 }

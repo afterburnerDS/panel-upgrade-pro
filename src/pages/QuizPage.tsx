@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 import Quiz from "@/components/Quiz";
 import LeadGate from "@/components/LeadGate";
@@ -7,6 +8,7 @@ import CalendarSection from "@/components/CalendarSection";
 import type { QuizAnswers, LeadInfo } from "@/types/quiz";
 
 const QuizPage = () => {
+  const navigate = useNavigate();
   const [step, setStep] = useState<number>(1);
   const [answers, setAnswers] = useState<QuizAnswers>({
     age: "",
@@ -23,8 +25,7 @@ const QuizPage = () => {
 
 
   const onQuizComplete = () => {
-    setShowLeadGate(true);
-    window.setTimeout(() => document.querySelector("#lead-gate")?.scrollIntoView({ behavior: "smooth" }), 50);
+    navigate("/lead");
   };
 
   const onLeadSubmitted = (l: LeadInfo) => {

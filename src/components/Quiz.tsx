@@ -255,40 +255,25 @@ const Quiz = ({ answers, setAnswers, setStepGlobal, onQuizComplete }: QuizProps)
               <CardDescription>Your ZIP helps confirm service area. The timeline guides scheduling and pricing recommendations.</CardDescription>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col gap-6">
-              <div className="grid sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-sm mb-1">Zip code</label>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    maxLength={10}
-                    className="w-full rounded-md border border-input px-3 py-2 text-sm bg-background"
-                    placeholder="e.g., 85001"
-                    value={answers.zip || ""}
-                    onChange={(e) => setAnswers({ ...answers, zip: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm mb-1">Timeline</label>
-                  <div className="space-y-3">
-                    {timelineOptions.map((t) => (
-                      <button
-                        key={t.value}
-                        type="button"
-                        onClick={() => setAnswers({ ...answers, timeline: t.value })}
-                        className={`w-full text-left flex items-center gap-3 rounded-xl border p-4 transition ${
-                          answers.timeline === t.value
-                            ? "border-primary bg-primary/5 ring-1 ring-primary"
-                            : "border-input bg-background hover:bg-accent/10"
-                        }`}
-                        aria-pressed={answers.timeline === t.value}
-                      >
-                        <span className="text-xl" aria-hidden>{t.icon}</span>
-                        <span className="font-medium">{t.label}</span>
-                      </button>
-                    ))}
-                  </div>
+              <div>
+                <label className="block text-sm mb-1">Timeline</label>
+                <div className="space-y-3">
+                  {timelineOptions.map((t) => (
+                    <button
+                      key={t.value}
+                      type="button"
+                      onClick={() => setAnswers({ ...answers, timeline: t.value })}
+                      className={`w-full text-left flex items-center gap-3 rounded-xl border p-4 transition ${
+                        answers.timeline === t.value
+                          ? "border-primary bg-primary/5 ring-1 ring-primary"
+                          : "border-input bg-background hover:bg-accent/10"
+                      }`}
+                      aria-pressed={answers.timeline === t.value}
+                    >
+                      <span className="text-xl" aria-hidden>{t.icon}</span>
+                      <span className="font-medium">{t.label}</span>
+                    </button>
+                  ))}
                 </div>
               </div>
               <div className="mt-auto flex justify-between pt-4">
