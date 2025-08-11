@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import roofImg from "@/assets/interior-ev-garage.jpg";
+import loadsImg from "@/assets/kitchen-induction.jpg";
+import sizeImg from "@/assets/home-office.jpg";
 import type { QuizAnswers, TripsOption, LoadOption, HomeSizeOption } from "@/types/quiz";
 
 const STORAGE_KEY = "panel-quiz-answers-v1";
@@ -13,6 +16,38 @@ const loadOptions: LoadOption[] = [
   "Hot tub / sauna",
   "Solar / battery soon",
   "Other",
+];
+
+// UI helpers for vertically stacked choices with icons
+const tripsOptionList: { value: TripsOption; label: string; icon: string }[] = [
+  { value: "Never", label: "Never", icon: "✅" },
+  { value: "A few times a year", label: "A few times a year", icon: "📅" },
+  { value: "Monthly", label: "Monthly", icon: "🗓️" },
+  { value: "Weekly", label: "Weekly", icon: "🔁" },
+  { value: "Daily", label: "Daily", icon: "⏰" },
+];
+
+const loadOptionIcons: Record<LoadOption, string> = {
+  "EV charger": "🚗",
+  "Home office circuits": "💻",
+  "Heat pump / HVAC": "🌬️",
+  "Induction range": "🔥",
+  "Hot tub / sauna": "🛁",
+  "Solar / battery soon": "☀️",
+  Other: "✨",
+};
+
+const homeSizeOptions: { value: HomeSizeOption; label: string; icon: string }[] = [
+  { value: "<1500", label: "Less than 1,500 sq ft", icon: "🏠" },
+  { value: "1500-2500", label: "1,500–2,500 sq ft", icon: "🏡" },
+  { value: "2500-4000", label: "2,500–4,000 sq ft", icon: "🏘️" },
+  { value: "4000+", label: "4,000+ sq ft", icon: "🏛️" },
+];
+
+const timelineOptions: { value: NonNullable<QuizAnswers["timeline"]>; label: string; icon: string }[] = [
+  { value: "ASAP", label: "ASAP", icon: "⚡" },
+  { value: "30–60 days", label: "30–60 days", icon: "📅" },
+  { value: "Exploring budget", label: "Exploring budget", icon: "💡" },
 ];
 
 interface QuizProps {
@@ -55,43 +90,46 @@ const Quiz = ({ answers, setAnswers, setStepGlobal, onQuizComplete }: QuizProps)
   const prev = () => setStep(Math.max(2, step - 1));
 
   return (
-    <section id="quiz" className="container px-4 py-12" aria-labelledby="quiz-heading">
-      <div className="max-w-3xl mx-auto">
+<section id="quiz" className="container px-4 pt-24 pb-12" aria-labelledby="quiz-heading">
+      <div className="max-w-3xl mx-auto min-h-[calc(100vh-160px)] flex flex-col">
         <h2 id="quiz-heading" className="sr-only">Panel Check Quiz</h2>
 
-        <div className="mb-4 flex items-center justify-between">
+<div className="mb-4 flex items-center justify-between">
           <span className="text-sm" aria-live="polite">Step {step} of {totalSteps}</span>
-          <span className="text-sm" aria-hidden>{progress}%</span>
+          <span className="text-sm" aria-hidden>{progress}% Complete</span>
         </div>
         <div className="h-2 w-full rounded bg-muted">
           <div className="h-2 rounded bg-accent" style={{ width: `${progress}%` }} />
         </div>
 
         {step === 2 && (
-          <Card className="mt-6">
+<Card className="mt-6 h-full shadow-xl rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-lg">Q2. Breaker behavior: How often do breakers trip?</CardTitle>
+              <CardTitle className="text-2xl">How often do breakers trip?</CardTitle>
+              <CardDescription>Frequent trips can indicate undersized circuits or overloaded service.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                {["Never", "A few times a year", "Monthly", "Weekly", "Daily"].map((opt => (
+            <CardContent className="flex-1 flex flex-col gap-6">
+              <img src={roofImg} alt="Breaker panel example" className="w-full h-48 object-cover rounded-xl border" loading="lazy" />
+              <div className="space-y-3">
+                {tripsOptionList.map((opt) => (
                   <button
-                    key={opt}
+                    key={opt.value}
                     type="button"
-                    onClick={() => setAnswers({ ...answers, trips: opt as TripsOption })}
-                    className={`rounded-lg px-3 py-2 text-sm border transition ${
-                      answers.trips === (opt as TripsOption)
-                        ? "bg-accent text-accent-foreground border-accent"
-                        : "bg-background border-input hover:bg-accent/10"
+                    onClick={() => setAnswers({ ...answers, trips: opt.value })}
+                    className={`w-full text-left flex items-center gap-3 rounded-xl border p-4 transition ${
+                      answers.trips === opt.value
+                        ? "border-primary bg-primary/5 ring-1 ring-primary"
+                        : "border-input bg-background hover:bg-accent/10"
                     }`}
-                    aria-pressed={answers.trips === (opt as TripsOption)}
+                    aria-pressed={answers.trips === opt.value}
                   >
-                    {opt}
+                    <span className="text-xl" aria-hidden>{opt.icon}</span>
+                    <span className="font-medium">{opt.label}</span>
                   </button>
-                )))}
+                ))}
               </div>
-              <div className="flex justify-between">
-                <Button variant="outline" onClick={prev}>Back</Button>
+              <div className="mt-auto flex justify-between pt-4">
+                <Button variant="outline" onClick={prev}>Previous</Button>
                 <Button variant="accent" onClick={next}>Next</Button>
               </div>
             </CardContent>
@@ -99,12 +137,14 @@ const Quiz = ({ answers, setAnswers, setStepGlobal, onQuizComplete }: QuizProps)
         )}
 
         {step === 3 && (
-          <Card className="mt-6">
+<Card className="mt-6 h-full shadow-xl rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-lg">Q3. Upcoming loads (multi-select)</CardTitle>
+              <CardTitle className="text-2xl">Which upgrades are you considering?</CardTitle>
+              <CardDescription>Upcoming loads help us gauge your future electrical demand.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <CardContent className="flex-1 flex flex-col gap-6">
+              <img src={loadsImg} alt="Example home upgrades" className="w-full h-48 object-cover rounded-xl border" loading="lazy" />
+              <div className="space-y-3">
                 {loadOptions.map((opt) => {
                   const active = answers.loads.includes(opt);
                   return (
@@ -116,18 +156,19 @@ const Quiz = ({ answers, setAnswers, setStepGlobal, onQuizComplete }: QuizProps)
                         if (active) set.delete(opt); else set.add(opt);
                         setAnswers({ ...answers, loads: Array.from(set) });
                       }}
-                      className={`rounded-lg px-3 py-2 text-sm border transition ${
-                        active ? "bg-accent text-accent-foreground border-accent" : "bg-background border-input hover:bg-accent/10"
+                      className={`w-full text-left flex items-center gap-3 rounded-xl border p-4 transition ${
+                        active ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-input bg-background hover:bg-accent/10"
                       }`}
                       aria-pressed={active}
                     >
-                      {opt}
+                      <span className="text-xl" aria-hidden>{loadOptionIcons[opt]}</span>
+                      <span className="font-medium">{opt}</span>
                     </button>
                   );
                 })}
               </div>
-              <div className="flex justify-between">
-                <Button variant="outline" onClick={prev}>Back</Button>
+              <div className="mt-auto flex justify-between pt-4">
+                <Button variant="outline" onClick={prev}>Previous</Button>
                 <Button variant="accent" onClick={next}>Next</Button>
               </div>
             </CardContent>
@@ -135,23 +176,26 @@ const Quiz = ({ answers, setAnswers, setStepGlobal, onQuizComplete }: QuizProps)
         )}
 
         {step === 4 && (
-          <Card className="mt-6">
+<Card className="mt-6 h-full shadow-xl rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-lg">Q4. Home size / load</CardTitle>
+              <CardTitle className="text-2xl">What is your home size?</CardTitle>
+              <CardDescription>Home size is a simple proxy for overall electrical load.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {(["<1500", "1500-2500", "2500-4000", "4000+"] as HomeSizeOption[]).map((opt) => (
+            <CardContent className="flex-1 flex flex-col gap-6">
+              <img src={sizeImg} alt="Home interior example" className="w-full h-48 object-cover rounded-xl border" loading="lazy" />
+              <div className="space-y-3">
+                {homeSizeOptions.map((opt) => (
                   <button
-                    key={opt}
+                    key={opt.value}
                     type="button"
-                    onClick={() => setAnswers({ ...answers, homeSize: opt })}
-                    className={`rounded-lg px-3 py-2 text-sm border transition ${
-                      answers.homeSize === opt ? "bg-accent text-accent-foreground border-accent" : "bg-background border-input hover:bg-accent/10"
+                    onClick={() => setAnswers({ ...answers, homeSize: opt.value })}
+                    className={`w-full text-left flex items-center gap-3 rounded-xl border p-4 transition ${
+                      answers.homeSize === opt.value ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-input bg-background hover:bg-accent/10"
                     }`}
-                    aria-pressed={answers.homeSize === opt}
+                    aria-pressed={answers.homeSize === opt.value}
                   >
-                    {opt === "<1500" ? "⬇️ <1,500 sq ft" : opt === "1500-2500" ? "1,500–2,500" : opt === "2500-4000" ? "2,500–4,000" : "4,000+"}
+                    <span className="text-xl" aria-hidden>{opt.icon}</span>
+                    <span className="font-medium">{opt.label}</span>
                   </button>
                 ))}
               </div>
@@ -167,8 +211,8 @@ const Quiz = ({ answers, setAnswers, setStepGlobal, onQuizComplete }: QuizProps)
                   onChange={(e) => setAnswers({ ...answers, sqFtDetail: e.target.value })}
                 />
               </div>
-              <div className="flex justify-between">
-                <Button variant="outline" onClick={prev}>Back</Button>
+              <div className="mt-auto flex justify-between pt-4">
+                <Button variant="outline" onClick={prev}>Previous</Button>
                 <Button variant="accent" onClick={next}>Next</Button>
               </div>
             </CardContent>
@@ -205,11 +249,12 @@ const Quiz = ({ answers, setAnswers, setStepGlobal, onQuizComplete }: QuizProps)
         )}
 
         {step === 6 && (
-          <Card className="mt-6">
+<Card className="mt-6 h-full shadow-xl rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-lg">Q6. Zip code & timeline</CardTitle>
+              <CardTitle className="text-2xl">Where are you located and what's your timeline?</CardTitle>
+              <CardDescription>Your ZIP helps confirm service area. The timeline guides scheduling and pricing recommendations.</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="flex-1 flex flex-col gap-6">
               <div className="grid sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-sm mb-1">Zip code</label>
@@ -226,27 +271,28 @@ const Quiz = ({ answers, setAnswers, setStepGlobal, onQuizComplete }: QuizProps)
                 </div>
                 <div>
                   <label className="block text-sm mb-1">Timeline</label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {["ASAP", "30–60 days", "Exploring budget"].map((t) => (
+                  <div className="space-y-3">
+                    {timelineOptions.map((t) => (
                       <button
-                        key={t}
+                        key={t.value}
                         type="button"
-                        onClick={() => setAnswers({ ...answers, timeline: t as any })}
-                        className={`rounded-lg px-3 py-2 text-sm border transition ${
-                          answers.timeline === (t as any)
-                            ? "bg-accent text-accent-foreground border-accent"
-                            : "bg-background border-input hover:bg-accent/10"
+                        onClick={() => setAnswers({ ...answers, timeline: t.value })}
+                        className={`w-full text-left flex items-center gap-3 rounded-xl border p-4 transition ${
+                          answers.timeline === t.value
+                            ? "border-primary bg-primary/5 ring-1 ring-primary"
+                            : "border-input bg-background hover:bg-accent/10"
                         }`}
-                        aria-pressed={answers.timeline === (t as any)}
+                        aria-pressed={answers.timeline === t.value}
                       >
-                        {t}
+                        <span className="text-xl" aria-hidden>{t.icon}</span>
+                        <span className="font-medium">{t.label}</span>
                       </button>
                     ))}
                   </div>
                 </div>
               </div>
-              <div className="flex justify-between">
-                <Button variant="outline" onClick={prev}>Back</Button>
+              <div className="mt-auto flex justify-between pt-4">
+                <Button variant="outline" onClick={prev}>Previous</Button>
                 <Button data-cta="finish-quiz" variant="hero" onClick={onQuizComplete}>See my results</Button>
               </div>
             </CardContent>
