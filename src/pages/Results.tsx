@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import SEOHead from "@/components/SEOHead";
 import ResultsReport from "@/components/ResultsReport";
-import CalendarSection from "@/components/CalendarSection";
+
 import { Button } from "@/components/ui/button";
 import { scoreQuiz } from "@/lib/quizScoring";
 import type { LeadInfo, QuizAnswers } from "@/types/quiz";
@@ -110,9 +110,6 @@ const Results = () => {
         </div>
       </section>
 
-      <div id="calendar">
-        <CalendarSection leadName={lead?.name} />
-      </div>
     </main>
   );
 };
