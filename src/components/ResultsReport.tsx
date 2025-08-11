@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { scoreQuiz } from "@/lib/quizScoring";
-import type { QuizAnswers, Tier } from "@/types/quiz";
+import type { QuizAnswers } from "@/types/quiz";
 import { useMemo } from "react";
 
 interface ResultsReportProps {
@@ -10,94 +10,71 @@ interface ResultsReportProps {
   onBookScroll: () => void;
 }
 
-const tierHeading = (tier: Tier) => {
-  if (tier === 3) return "Priority Upgrade Recommended — Likely 200A Main Service";
-  if (tier === 2) return "Upgrade Worth Considering — Capacity & Safety Review Inside";
-  return "No Urgent Risks Found — Monitor & Plan Ahead";
-};
-
 const ResultsReport = ({ answers, onDownload, onBookScroll }: ResultsReportProps) => {
-  const { score, tier } = useMemo(() => scoreQuiz(answers), [answers]);
+  const { score } = useMemo(() => scoreQuiz(answers), [answers]);
 
-  const loadCount = (answers.loads || []).length;
-  const loadPercent = Math.min(100, 20 + loadCount * 15 + (answers.homeSize === "4000+" ? 20 : answers.homeSize === "2500-4000" ? 10 : 0));
+  const estimateSavings = (a: QuizAnswers, s: number) => {
+    let base = 250;
+    const billMult: Record<NonNullable<QuizAnswers["trips"]>, number> = {
+      "Never": 0.9,
+      "A few times a year": 1,
+      "Monthly": 1.15,
+      "Weekly": 1.35,
+      "Daily": 1.55,
+      "": 1,
+    } as const;
+    base *= billMult[a.trips || ""] || 1;
+    const loads = new Set(a.loads || []);
+    base += (loads.has("EV charger") ? 200 : 0)
+      + (loads.has("Heat pump / HVAC") ? 150 : 0)
+      + (loads.has("Induction range") ? 120 : 0)
+      + (loads.has("Hot tub / sauna") ? 100 : 0)
+      + (loads.has("Solar / battery soon") ? 200 : 0);
+    if (a.homeSize === "2500-4000") base += 100;
+    if (a.homeSize === "4000+") base += 180;
+    const multiplier = 1 + s / 20;
+    const est = Math.round((base * multiplier) / 10) * 10;
+    return Math.max(200, Math.min(est, 5000));
+  };
 
-  const safetySummary = useMemo(() => {
-    const parts: string[] = [];
-    if (answers.age === "20-30") parts.push("Panel age may approach end-of-life; components can drift out of spec.");
-    if (answers.age === "30+ / not sure") parts.push("Older or legacy panels may have documented issues; we’ll verify on-site.");
-    if (["Monthly", "Weekly", "Daily"].includes(answers.trips)) parts.push("Frequent trips suggest overloads or weak breakers; modern panels reduce nuisance trips.");
-    return parts.length ? parts.join(" ") : "No urgent flags based on your inputs; we’ll still perform a code-compliance review on-site.";
-  }, [answers]);
+  const savings = useMemo(() => estimateSavings(answers, score), [answers, score]);
+  const currency = new Intl.NumberFormat(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+
+  const loads = new Set(answers.loads || []);
 
   return (
-    <section className="container px-4 py-12" aria-labelledby="results-heading">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h2 id="results-heading" className="text-2xl sm:text-3xl font-bold">{tierHeading(tier)}</h2>
-          <p className="mt-2 text-sm text-muted-foreground">Score: {score} • Tier {tier}</p>
-        </div>
+    <section className="container px-4 py-8" aria-labelledby="analysis-heading">
+      <div className="max-w-3xl mx-auto space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle id="analysis-heading">Your Personalized Savings Analysis</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 text-sm leading-6">
+            <p>🎉 Congratulations! Your Smart Panel Savings Report is ready.</p>
+            <p>💰 You could save <strong>{currency.format(savings)} per year</strong> with a smart panel and intelligent load management tailored to your home.</p>
+            <p>⚡ Here's your personalized breakdown: With your appliance profile and schedule, a smart panel can automatically shift heavy loads to off‑peak times and cut waste. Based on your inputs, your potential savings score is <strong>{Math.round((score/12)*100)}%</strong>.</p>
+            <p>🏡 Our recommendation: a premium smart panel setup sized for your home{loads.has("Solar / battery soon") ? ", plus battery‑ready wiring" : ""}. This configuration is designed to maximize control, safety, and savings.</p>
+            <p>🔋 Battery boost: {loads.has("Solar / battery soon") ? "Great call — pairing with solar/battery further increases savings." : "Consider adding solar or a small battery later — it can further increase savings."}</p>
+            <p>🚀 Ready to lower bills? Get your free professional survey and start saving immediately. Typical installations complete within 2–6 weeks.</p>
+            <p className="text-xs text-muted-foreground">Estimates are based on typical utility rates and usage patterns. A professional survey is recommended for a final quote.</p>
+          </CardContent>
+        </Card>
 
-        <div className="grid md:grid-cols-3 gap-4">
-          <Card className="md:col-span-2">
-            <CardHeader>
-              <CardTitle>Safety & Code Findings</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">{safetySummary}</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Estimated Budget Range</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm">Typical panel upgrades: $8K–$15K depending on service size, distance, grounding, permits.</p>
-            </CardContent>
-          </Card>
-        </div>
+        <Card className="bg-success/10 border-success/30">
+          <CardHeader>
+            <CardTitle className="text-success">What Happens Next</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            <div className="flex items-start gap-3"><span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-success text-success-foreground text-xs">1</span><p>You’ll receive a detailed savings report via text with exact calculations.</p></div>
+            <div className="flex items-start gap-3"><span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-success text-success-foreground text-xs">2</span><p>Reply to confirm your free consultation to discuss your personalized plan.</p></div>
+            <div className="flex items-start gap-3"><span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-success text-success-foreground text-xs">3</span><p>Get your custom quote and start saving on your electricity bills.</p></div>
+          </CardContent>
+        </Card>
 
-        <div className="grid md:grid-cols-3 gap-4 mt-4">
-          <Card className="md:col-span-2">
-            <CardHeader>
-              <CardTitle>Capacity & Future-Proofing</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <div className="h-3 w-full rounded bg-muted">
-                  <div className="h-3 rounded bg-success" style={{ width: `${loadPercent}%` }} />
-                </div>
-                <p className="text-xs text-muted-foreground mt-1">Projected load readiness based on planned circuits and home size.</p>
-              </div>
-              <ul className="list-disc pl-5 text-sm text-muted-foreground">
-                <li>Map planned loads to dedicated circuits and available amperage.</li>
-                <li>Ensure headroom for EVs, induction, heat pumps, hot tubs, and battery/solar.</li>
-                <li>Modern breakers and labeling reduce trips and improve safety.</li>
-              </ul>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>What a New Panel Enables</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1">
-                <li>EVs</li>
-                <li>Solar/battery</li>
-                <li>Induction range</li>
-                <li>Heat pump</li>
-                <li>Backyard spa</li>
-                <li>Dedicated home office power</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="mt-8 text-center">
-          <p className="mb-4">Book today to lock in $200 OFF your panel upgrade.</p>
+        <div className="text-center">
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button data-cta="book-call" variant="hero" onClick={onBookScroll}>Book Phone Consultation</Button>
-            <Button variant="outline" onClick={onDownload}>Download Report (PDF)</Button>
+            <Button data-cta="book-call" variant="hero" onClick={onBookScroll}>Schedule Consultation</Button>
+            <Button variant="outline" onClick={onDownload}>Download Report (HTML)</Button>
           </div>
         </div>
       </div>

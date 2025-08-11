@@ -50,8 +50,8 @@ const QuizPage = () => {
     document.querySelector("#calendar")?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const seoTitle = "Panel Check Quiz | Premium Panel Upgrades";
-  const seoDesc = "Take our 60-second Panel Check to get personalized recommendations and $200 OFF if you qualify.";
+  const seoTitle = "Smart Panel Savings Quiz | Estimate Annual Savings";
+  const seoDesc = "Take our 60-second Savings Quiz to get personalized smart panel savings and $200 OFF if you qualify.";
 
   return (
     <main>

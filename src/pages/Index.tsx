@@ -39,8 +39,8 @@ const Index = () => {
 
 
 
-  const seoTitle = "Premium Panel Upgrades | High-End Home Electrical";
-  const seoDesc = "Premium electrical panel upgrades ($8K–$15K avg). Safer, EV-ready, code-compliant. Take our 60-second Panel Check and claim $200 OFF.";
+  const seoTitle = "Smart Panel Savings | Cut Electric Bills with Load Control";
+  const seoDesc = "Estimate your annual savings with a smart panel upgrade. Take our 60-second Savings Quiz and see how much you could save.";
 
   return (
     <main>

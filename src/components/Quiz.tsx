@@ -20,11 +20,11 @@ const loadOptions: LoadOption[] = [
 
 // UI helpers for vertically stacked choices with icons
 const tripsOptionList: { value: TripsOption; label: string; icon: string }[] = [
-  { value: "Never", label: "Never", icon: "✅" },
-  { value: "A few times a year", label: "A few times a year", icon: "📅" },
-  { value: "Monthly", label: "Monthly", icon: "🗓️" },
-  { value: "Weekly", label: "Weekly", icon: "🔁" },
-  { value: "Daily", label: "Daily", icon: "⏰" },
+  { value: "Never", label: "Under $100", icon: "💵" },
+  { value: "A few times a year", label: "$100–$200", icon: "💰" },
+  { value: "Monthly", label: "$200–$300", icon: "📈" },
+  { value: "Weekly", label: "$300–$400", icon: "📊" },
+  { value: "Daily", label: "$400+", icon: "💸" },
 ];
 
 const loadOptionIcons: Record<LoadOption, string> = {
@@ -92,7 +92,7 @@ const Quiz = ({ answers, setAnswers, setStepGlobal, onQuizComplete }: QuizProps)
   return (
 <section id="quiz" className="container px-4 pt-24 pb-12" aria-labelledby="quiz-heading">
       <div className="max-w-3xl mx-auto min-h-[calc(100vh-160px)] flex flex-col">
-        <h2 id="quiz-heading" className="sr-only">Panel Check Quiz</h2>
+        <h2 id="quiz-heading" className="sr-only">Smart Panel Savings Quiz</h2>
 
 <div className="mb-4 flex items-center justify-between">
           <span className="text-sm" aria-live="polite">Step {step} of {totalSteps}</span>
@@ -105,11 +105,11 @@ const Quiz = ({ answers, setAnswers, setStepGlobal, onQuizComplete }: QuizProps)
         {step === 2 && (
 <Card className="mt-6 h-full shadow-xl rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-2xl">How often do breakers trip?</CardTitle>
-              <CardDescription>Frequent trips can indicate undersized circuits or overloaded service.</CardDescription>
+              <CardTitle className="text-2xl">What’s your average monthly electric bill?</CardTitle>
+              <CardDescription>Select the range that best matches your typical bill.</CardDescription>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col gap-6">
-              <img src={roofImg} alt="Breaker panel example" className="w-full h-48 object-cover rounded-xl border" loading="lazy" />
+              <img src={roofImg} alt="Electric bill example" className="w-full h-48 object-cover rounded-xl border" loading="lazy" />
               <div className="space-y-3">
                 {tripsOptionList.map((opt) => (
                   <button
@@ -139,11 +139,11 @@ const Quiz = ({ answers, setAnswers, setStepGlobal, onQuizComplete }: QuizProps)
         {step === 3 && (
 <Card className="mt-6 h-full shadow-xl rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-2xl">Which upgrades are you considering?</CardTitle>
-              <CardDescription>Upcoming loads help us gauge your future electrical demand.</CardDescription>
+              <CardTitle className="text-2xl">Which high‑usage appliances do you have or plan?</CardTitle>
+              <CardDescription>Smart panels can optimize and shift these loads to slash costs.</CardDescription>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col gap-6">
-              <img src={loadsImg} alt="Example home upgrades" className="w-full h-48 object-cover rounded-xl border" loading="lazy" />
+              <img src={loadsImg} alt="High-usage appliances" className="w-full h-48 object-cover rounded-xl border" loading="lazy" />
               <div className="space-y-3">
                 {loadOptions.map((opt) => {
                   const active = answers.loads.includes(opt);
@@ -178,8 +178,8 @@ const Quiz = ({ answers, setAnswers, setStepGlobal, onQuizComplete }: QuizProps)
         {step === 4 && (
 <Card className="mt-6 h-full shadow-xl rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-2xl">What is your home size?</CardTitle>
-              <CardDescription>Home size is a simple proxy for overall electrical load.</CardDescription>
+              <CardTitle className="text-2xl">How big is your home?</CardTitle>
+              <CardDescription>Home size helps estimate baseline energy use.</CardDescription>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col gap-6">
               <img src={sizeImg} alt="Home interior example" className="w-full h-48 object-cover rounded-xl border" loading="lazy" />
@@ -251,8 +251,8 @@ const Quiz = ({ answers, setAnswers, setStepGlobal, onQuizComplete }: QuizProps)
         {step === 6 && (
 <Card className="mt-6 h-full shadow-xl rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-2xl">Where are you located and what's your timeline?</CardTitle>
-              <CardDescription>Your ZIP helps confirm service area. The timeline guides scheduling and pricing recommendations.</CardDescription>
+              <CardTitle className="text-2xl">What’s your project timeline?</CardTitle>
+              <CardDescription>Your timeline helps us tailor scheduling and savings options.</CardDescription>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col gap-6">
               <div>

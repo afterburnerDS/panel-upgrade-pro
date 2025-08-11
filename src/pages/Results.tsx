@@ -33,11 +33,37 @@ const Results = () => {
   }, [answers, navigate]);
 
   const summary = useMemo(() => {
-    if (!answers) return { score: 0, tier: 1, percent: 0 } as const;
+    if (!answers) return { score: 0, tier: 1, percent: 0, annualSavings: 0 } as const;
     const { score, tier } = scoreQuiz(answers);
     const maxScore = 12; // from scoring rules
     const percent = Math.round((score / maxScore) * 100);
-    return { score, tier, percent } as const;
+
+    const estimateSavings = (a: QuizAnswers, s: number) => {
+      let base = 250; // base annual savings
+      const billMult: Record<NonNullable<QuizAnswers["trips"]>, number> = {
+        "Never": 0.9,
+        "A few times a year": 1,
+        "Monthly": 1.15,
+        "Weekly": 1.35,
+        "Daily": 1.55,
+        "": 1,
+      } as const;
+      base *= billMult[a.trips || ""] || 1;
+      const loads = new Set(a.loads || []);
+      base += (loads.has("EV charger") ? 200 : 0)
+        + (loads.has("Heat pump / HVAC") ? 150 : 0)
+        + (loads.has("Induction range") ? 120 : 0)
+        + (loads.has("Hot tub / sauna") ? 100 : 0)
+        + (loads.has("Solar / battery soon") ? 200 : 0);
+      if (a.homeSize === "2500-4000") base += 100;
+      if (a.homeSize === "4000+") base += 180;
+      const multiplier = 1 + s / 20; // up to +60%
+      const est = Math.round((base * multiplier) / 10) * 10;
+      return Math.max(200, Math.min(est, 5000));
+    };
+
+    const annualSavings = estimateSavings(answers, score);
+    return { score, tier, percent, annualSavings } as const;
   }, [answers]);
 
   const downloadReport = () => {
@@ -61,30 +87,19 @@ const Results = () => {
   return (
     <main>
       <SEOHead
-        title="Your Panel Readiness Results"
-        description="Detailed safety and EV readiness report with personalized recommendations."
+        title="Your Smart Panel Savings Report"
+        description="Estimated annual savings and personalized recommendations for your smart panel upgrade."
       />
 
       <section className="container px-4 py-8">
         <div className="max-w-3xl mx-auto space-y-6">
-          <header className="rounded-2xl border bg-primary/5 p-6 sm:p-8">
-            <h1 className="text-2xl sm:text-3xl font-bold">Your Panel Readiness</h1>
-            <p className="text-muted-foreground mt-1">Based on your home's details and planned loads</p>
-            <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="rounded-xl bg-background border p-4">
-                <p className="text-xs text-muted-foreground">Readiness Score</p>
-                <p className="text-2xl font-semibold">{summary.percent}%</p>
-              </div>
-              <div className="rounded-xl bg-background border p-4">
-                <p className="text-xs text-muted-foreground">Tier</p>
-                <p className="text-2xl font-semibold">{summary.tier}</p>
-              </div>
-              <div className="rounded-xl bg-background border p-4">
-                <p className="text-xs text-muted-foreground">Raw score</p>
-                <p className="text-2xl font-semibold">{summary.score}/12</p>
-              </div>
-            </div>
-            <div className="mt-6">
+          <header className="rounded-2xl border bg-success/10 p-6 sm:p-8">
+            <p className="text-center text-sm sm:text-base text-success font-medium">Your Smart Panel Savings Potential</p>
+            <h1 className="text-2xl sm:text-4xl font-extrabold text-center mt-2">
+              Estimated Annual Savings: {new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(summary.annualSavings)}
+            </h1>
+            <p className="text-center text-muted-foreground mt-2">Based on your home's characteristics and energy usage</p>
+            <div className="mt-6 flex items-center justify-center">
               <Button size="lg" variant="hero" onClick={bookScroll}>Schedule Consultation</Button>
             </div>
           </header>
